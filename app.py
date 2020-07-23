@@ -10,9 +10,9 @@ app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
 
 @app.route("/", methods=["GET"])
 def main():
-    data = {}
-    for k, v in request.headers.items():
-        data[k] = v
+    data = {
+        'remote_addr': request.headers.get("X-Forwarded-For", request.remote_addr)
+    }
 
     return jsonify(data)
 
