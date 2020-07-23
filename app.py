@@ -5,16 +5,16 @@ import os
 
 
 app = Flask(__name__)
+app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
 
 
 @app.route("/", methods=["GET"])
 def main():
-    data = {
-        'remote_addr': request.remote_addr
-    }
+    data = {}
     for k, v in request.headers.items():
         data[k] = v
-    return jsonify(data), 200
+
+    return jsonify(data)
 
 
 if __name__ == '__main__':
