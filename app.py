@@ -12,6 +12,8 @@ def main():
     data = {
         'remote_addr': request.remote_addr
     }
+    for k, v in request.headers.items():
+        data[k] = v
     return jsonify(data), 200
 
 
