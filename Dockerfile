@@ -1,16 +1,15 @@
-FROM python:alpine
+FROM golang:1.15-buster as builder
 
-ADD requirements.txt /requirements.txt
+COPY . .
 
-RUN pip3 install -r /requirements.txt && \
-    rm -rf /root/.cache
+ENV GOOS linux
+ENV GOARCH amd64
+ENV CGO_ENABLED 0
 
-ADD app.py /app.py
+RUN go build -o /go/bin/whatsmyip
 
-ENV PORT=5000
+FROM scratch
 
-EXPOSE 5000
+COPY --from=builder /go/bin/whatsmyip /whatsmyip
 
-USER nobody
-
-CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 app:app
+CMD [ "/whatsmyip" ]
