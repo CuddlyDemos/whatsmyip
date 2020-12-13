@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,7 +17,8 @@ func main() {
 }
 
 func index(c *gin.Context) {
-	ip := c.Request.Header.Get("X-FORWARDED-FOR")
+	ips := strings.Split(c.Request.Header.Get("X-FORWARDED-FOR"), ",")
+	ip := ips[len(ips)-1]
 	if ip == "" {
 		ip = c.ClientIP()
 	}
